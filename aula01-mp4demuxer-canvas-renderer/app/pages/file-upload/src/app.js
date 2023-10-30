@@ -4,16 +4,33 @@ import View from './view.js'
 const view = new View()
 const clock = new Clock()
 
+const worker = new Worker('./src/worker/worker.js', {
+    type: 'module'
+})
+
+worker.onmessage = ({ data }) => {
+    if (data.status !== 'done') return;
+    
+    clock.stop()
+    view.updateElapsedtime(`Process took ${took.replace('ago', '')}`)
+}
+
+
 let took = ''
 view.configureOnFileChange(file => {
+
+    //inicializando o projeto
+    worker.postMessage({
+        file
+    })
+
     clock.start((time) => {
         took = time;
         view.updateElapsedtime(`Process started ${time}`)
     })
 
     setTimeout(() => {
-        clock.stop()
-        view.updateElapsedtime(`Process took ${took.replace('ago', '')}`)
+
     }, 5000)
 })
 
