@@ -9,7 +9,8 @@ export default class View {
     #txtfileName = document.getElementById('fileName')
     #fileUploadWrapper = document.getElementById('fileUploadWrapper')
     #elapsed = document.getElementById('elapsed')
-    #canvas = <canvas id="preview-144p"></canvas>
+    
+    #canvas = document.getElementById("preview-144p")
 
     constructor(){
         this.configureBtnUploadClick()
@@ -27,6 +28,7 @@ export default class View {
     }
 
     configureBtnUploadClick() {
+
         this.#btnUploadVideo.addEventListener('click', () => {
             // trigger file input
             this.#fileUpload.click()
@@ -55,6 +57,6 @@ export default class View {
 
     //na hora de configurar a gente passa a função que a gente quer
     configureOnFileChange(fn) {
-        this.#fileUpload.addEventListener('change', this.configureOnFileChange(fn))
+        this.#fileUpload.addEventListener('change', this.onChange(fn))
     }
 }

@@ -17,3 +17,37 @@ view.configureOnFileChange(file => {
     }, 5000)
 })
 
+//simulando o click no botao que ja adiciona o vídeo
+async function fakeFetch() {
+    const filePath = '/videos/frag_bunny.mp4'
+    const response = await fetch(filePath)
+
+    // traz o tamanho do arquivo em bytes
+    // const response = await fetch(filePath, {
+    //     method: "HEAD"
+    // })
+    //response.headers.het('content-length')
+    //debugger
+
+
+    const file = new File([await response.blob()] /*baixa o arquivo inteiro e joga na varialvel. Blob é o formato binário do objeto*/
+        , filePath, {
+        type: 'video/mp4',
+        lastModified: Date.now()
+    })
+
+
+    //dispara o evento
+    const event = new Event('change')
+
+    //criando uma propriedade dentro de event para alterar o valor dele
+    Reflect.defineProperty(
+        event,
+        'target',
+        { value: { files: [file] } }
+    )
+
+    document.getElementById('fileUpload').dispatchEvent(event)
+}
+
+fakeFetch()
